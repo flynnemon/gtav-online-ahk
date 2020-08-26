@@ -43,11 +43,12 @@
 ;   https://www.autohotkey.com/docs/KeyList.htm
 ; WARNING: If you don't want to use a certain binding use "F24"
 ;          or any other valid key or it will break!
-SnackMenuKey         := "+#" ; Open Snack menu (+ = shift, rtfm).
-AutoHealthKey        := "#" ; Automatic snacking. Eats 2 snacks from second snack slot.
+SnackMenuKey         := "+F17" ; Open Snack menu (+ = shift, rtfm).
+AutoHealthKey        := "F17" ; Automatic snacking. Eats 2 snacks from second snack slot.
 ArmorMenuKey         := "+F1" ; Open Armor menu.
 AutoArmorKey         := "F1" ; Automatic armor equip (uses super heavy armor only).
 RetrieveCarKey       := "F2" ; Request Personal Vehicle.
+ReturnCarKey         := "F19" ; Return Personal Vehicle.
 TogglePassiveKey     := "F3" ; Toggle passive mode.
 EquipScarfKey        := "NumpadDot" ; Equip first scarf (heist outfit glitch, see readme/misc).
 ToggleRadarKey       := "+F2" ; Toggle between extended and standar radar.
@@ -59,12 +60,14 @@ KillGameKey          := "+F12" ; Kill game process, requires pskill.exe
 ForceDisconnectKey   := "F12" ; Force disconnect by suspending process for 10s, requires pssuspend.exe
 ChatSnippetsKey      := "F11" ; Gives you a few text snippets to put in chat (chat must be already open)
 RandomHeistKey       := "F7" ; Chooses on-call random heist from phone options
-CEOBuzzardKey        := "F24" ; Spawn free CEO buzzard
-
+CEORegisterKey       := "F18" ; Register as a CEO
+CEORetireKey         := "+F18" ; Register as a CEO
+CEOBuzzardKey        := "F21" ; Spawn free CEO buzzard
+CEOBallerKey         := "F20" ; Spawn free CEO Baller
 DialDialogKey        := "+F5" ; Call GUI with a list of almost all numbers
 CallMechanicKey      := "F5" ; Call Mechanic
-CallPegasusKey       := "F24" ; Call Pegasus
-CallMerryweatherKey  := "F24" ; Call Merryweather
+CallPegasusKey       := "F22" ; Call Pegasus
+CallMerryweatherKey  := "F23" ; Call Merryweather
 CallInsuranceKey     := "F6" ; Call Insurance
 CallLesterKey        := "+F6" ; Call Lester
 
@@ -168,6 +171,12 @@ Hotkey, %CallPegasusKey%, CallPegasus
 Hotkey, %CallMerryweatherKey%, CallMerryweather
 Hotkey, %CallInsuranceKey%, CallInsurance
 Hotkey, %CallLesterKey%, CallLester
+
+Hotkey, %CEOBallerKey%, CEOBaller
+Hotkey, %ReturnCarKey%, ReturnCar
+Hotkey, %CEORegisterKey%, CEORegister
+Hotkey, %CEORetireKey%, CEORetire
+
 
 ; Sets delay(ms) between keystrokes issued. Arguments are delay between keystrokes and press duration, respectively.
 ; They might be able to go lower but these values are pretty fast and work reliably.
@@ -541,6 +550,12 @@ RetrieveCar:
   Send {Down}{Down}{Down}{Down}{Enter}{Enter}{%IGB_Interaction%}
   return
 
+; Retrieve your currently active vehicle
+ReturnCar:
+  openInteractionMenu(IsVIPActivated)
+  Send {Down}{Down}{Down}{Down}{Enter}{Down 4}{Enter}{%IGB_Interaction%}
+  return
+
 ; Chooses on-call random heist from phone options
 RandomHeist:
   turnCapslockOff()
@@ -550,10 +565,30 @@ RandomHeist:
   Send {Enter}{Enter}
   return
 
+; Register as CEO
+CEORegister:
+  openInteractionMenu(false)
+  Send {Down 6}{Enter}{Enter}
+  IsVIPActivated := true
+  return
+
+; Retire as CEO
+CEORetire:
+  openInteractionMenu(false)
+  Send {Enter}{Up 1}{Enter}
+  IsVIPActivated := false
+  return
+
 ; Calls in free CEO buzzard (if you are CEO)
 CEOBuzzard:
   openInteractionMenu(false)
   Send {Enter}{Up 2}{Enter}{Down 4}{Enter}
+  return
+
+; Calls in free CEO baller (if you are CEO)
+CEOBaller:
+  openInteractionMenu(false)
+  Send {Enter}{Up 2}{Enter}{Down 1}{Enter}
   return
 
 ; Show a list of chat snippets to type out (chat must be opened)
