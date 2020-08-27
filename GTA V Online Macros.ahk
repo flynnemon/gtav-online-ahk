@@ -43,33 +43,34 @@
 ;   https://www.autohotkey.com/docs/KeyList.htm
 ; WARNING: If you don't want to use a certain binding use "F24"
 ;          or any other valid key or it will break!
-SnackMenuKey         := "+F17" ; Open Snack menu (+ = shift, rtfm).
-AutoHealthKey        := "F17" ; Automatic snacking. Eats 2 snacks from second snack slot.
-ArmorMenuKey         := "+F1" ; Open Armor menu.
-AutoArmorKey         := "F1" ; Automatic armor equip (uses super heavy armor only).
-RetrieveCarKey       := "F2" ; Request Personal Vehicle.
-ReturnCarKey         := "F19" ; Return Personal Vehicle.
-TogglePassiveKey     := "F3" ; Toggle passive mode.
-EquipScarfKey        := "NumpadDot" ; Equip first scarf (heist outfit glitch, see readme/misc).
-ToggleRadarKey       := "+F2" ; Toggle between extended and standar radar.
-CycleOutfitKey       := "NumpadAdd" ; Equip next/cycle through saved outfits.
-ToggleVIPKey         := "NumpadSub" ; Toggle VIP mode (required when VIP/CEO/MC).
-ToggleAFKKey         := "+NumpadSub" ; Toggle AFK mode
-ToggleClickerKey     := "+XButton2" ; Toggle Clicker (XButton2 = Mouse5)
-KillGameKey          := "+F12" ; Kill game process, requires pskill.exe
-ForceDisconnectKey   := "F12" ; Force disconnect by suspending process for 10s, requires pssuspend.exe
-ChatSnippetsKey      := "F11" ; Gives you a few text snippets to put in chat (chat must be already open)
-RandomHeistKey       := "F7" ; Chooses on-call random heist from phone options
-CEORegisterKey       := "F18" ; Register as a CEO
-CEORetireKey         := "+F18" ; Register as a CEO
-CEOBuzzardKey        := "F21" ; Spawn free CEO buzzard
-CEOBallerKey         := "F20" ; Spawn free CEO Baller
-DialDialogKey        := "+F5" ; Call GUI with a list of almost all numbers
-CallMechanicKey      := "F5" ; Call Mechanic
-CallPegasusKey       := "F22" ; Call Pegasus
-CallMerryweatherKey  := "F23" ; Call Merryweather
-CallInsuranceKey     := "F6" ; Call Insurance
-CallLesterKey        := "+F6" ; Call Lester
+SnackMenuKey         := "+F17"          ; Open Snack menu (+ = shift, rtfm).
+AutoHealthKey        := "F17"           ; Automatic snacking. Eats 2 snacks from second snack slot.
+ArmorMenuKey         := "+F1"           ; Open Armor menu.
+AutoArmorKey         := "F1"            ; Automatic armor equip (uses super heavy armor only).
+RetrieveCarKey       := "F2"            ; Request Personal Vehicle.
+ReturnCarKey         := "F19"           ; Return Personal Vehicle.
+TogglePassiveKey     := "F3"            ; Toggle passive mode.
+EquipScarfKey        := "NumpadDot"     ; Equip first scarf (heist outfit glitch, see readme/misc).
+ToggleRadarKey       := "+F2"           ; Toggle between extended and standar radar.
+CycleOutfitKey       := "NumpadAdd"     ; Equip next/cycle through saved outfits.
+ToggleVIPKey         := "NumpadSub"     ; Toggle VIP mode (required when VIP/CEO/MC).
+ToggleAFKKey         := "+NumpadSub"    ; Toggle AFK mode
+ToggleClickerKey     := "+XButton2"     ; Toggle Clicker (XButton2 = Mouse5)
+KillGameKey          := "+F12"          ; Kill game process, requires pskill.exe
+ForceDisconnectKey   := "F12"           ; Force disconnect by suspending process for 10s, requires pssuspend.exe
+ChatSnippetsKey      := "F11"           ; Gives you a few text snippets to put in chat (chat must be already open)
+RandomHeistKey       := "F7"            ; Chooses on-call random heist from phone options
+MCRegisterKey        := "+F19"          ; Register as a MC President
+CEORegisterKey       := "F18"           ; Register as a CEO
+VIPRetireKey         := "+F18"          ; Retire as CEO/VIP/MC
+CEOBuzzardKey        := "F21"           ; Spawn free CEO buzzard
+CEOBallerKey         := "F20"           ; Spawn free CEO Baller
+DialDialogKey        := "+F5"           ; Call GUI with a list of almost all numbers
+CallMechanicKey      := "F5"            ; Call Mechanic
+CallPegasusKey       := "F22"           ; Call Pegasus
+CallMerryweatherKey  := "F23"           ; Call Merryweather
+CallInsuranceKey     := "F6"            ; Call Insurance
+CallLesterKey        := "+F6"           ; Call Lester
 
 
 ; Options (should be fine out of the box)
@@ -175,7 +176,8 @@ Hotkey, %CallLesterKey%, CallLester
 Hotkey, %CEOBallerKey%, CEOBaller
 Hotkey, %ReturnCarKey%, ReturnCar
 Hotkey, %CEORegisterKey%, CEORegister
-Hotkey, %CEORetireKey%, CEORetire
+Hotkey, %VIPRetireKey%, VIPRetire
+Hotkey, %MCRegisterKey%, MCRegister
 
 
 ; Sets delay(ms) between keystrokes issued. Arguments are delay between keystrokes and press duration, respectively.
@@ -572,8 +574,16 @@ CEORegister:
   IsVIPActivated := true
   return
 
-; Retire as CEO
-CEORetire:
+; Register as MC President
+MCRegister:
+  openInteractionMenu(false)
+  Send {Down 7}{Enter}{Enter}
+  IsVIPActivated := true
+  return
+
+
+; Retire as CEO/VIP/MC
+VIPRetire:
   openInteractionMenu(false)
   Send {Enter}{Up 1}{Enter}
   IsVIPActivated := false
