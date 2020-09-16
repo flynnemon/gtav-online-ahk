@@ -69,7 +69,8 @@ ToggleAFKKey         := "+NumpadSub"    ; Toggle AFK mode
 ToggleClickerKey     := "+XButton2"     ; Toggle Clicker (XButton2 = Mouse5)
 KillGameKey          := "+F12"          ; Kill game process, requires pskill.exe
 ForceDisconnectKey   := "F12"           ; Force disconnect by suspending process for 10s, requires pssuspend.exe
-ChatSnippetsKey      := "F11"           ; Gives you a few text snippets to put in chat (chat must be already open)
+ChatSnippetsKey      := "F11"           ; Gives you a few text snippets to put in organization chat
+PublicChatSnippetsKey := "+F11"           ; Gives you a few text snippets to put in chat
 RandomHeistKey       := "F7"            ; Chooses on-call random heist from phone options
 MCRegisterKey        := "+F19"          ; Register as a MC President and enable VIP mode
 CEORegisterKey       := "F18"           ; Register as a CEO and enable VIP mode
@@ -111,6 +112,7 @@ Hotkey, %KillGameKey%, KillGame
 Hotkey, %ForceDisconnectKey%, ForceDisconnect
 Hotkey, %RandomHeistKey%, RandomHeist
 Hotkey, %ChatSnippetsKey%, ChatSnippets
+Hotkey, %PublicChatSnippetsKey%, PublicChatSnippets
 Hotkey, %CEOBuzzardKey%, CEOBuzzard
 Hotkey, %CallMechanicKey%, CallMechanic
 Hotkey, %CallPegasusKey%, CallPegasus
@@ -574,6 +576,22 @@ ChatSnippets:
   Gui, CSNIP:show
   Return
 
+PublicChatSnippets:
+  turnCapslockOff()
+  Gui, CSNIP:add, Text, , Choose your snippet:
+  for index, element in PublicArrayChatSnippets
+  {
+    if (index = 1) {
+      Gui, CSNIP:add, Radio, vSnippetChoice, %element%
+    } else {
+      Gui, CSNIP:add, Radio, , %element%
+    }
+  }
+
+  Gui, CSNIP:add, Button, Default g_PublicChatSnippetsTypeout, type out...
+  Gui, CSNIP:show
+  Return
+
 CSNIPGuiEscape:
   Gui, CSNIP:cancel
   Gui, CSNIP:destroy
@@ -589,7 +607,18 @@ CSNIPGuiClose:
 _ChatSnippetsTypeout:
   Gui, CSNIP:submit
   bringGameIntoFocus(true)
+  Send {y}
   Send % ArrayChatSnippets[SnippetChoice]
+  Send {Enter}
+  Gui, CSNIP:destroy
+  Return
+
+_PublicChatSnippetsTypeout:
+  Gui, CSNIP:submit
+  bringGameIntoFocus(true)
+  Send {t}
+  Send % ArrayChatSnippets[SnippetChoice]
+  Send {Enter}
   Gui, CSNIP:destroy
   Return
 
