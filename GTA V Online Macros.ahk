@@ -71,7 +71,13 @@ CallPegasusKey       := "F22"           ; Call Pegasus
 CallMerryweatherKey  := "F23"           ; Call Merryweather
 CallInsuranceKey     := "F6"            ; Call Insurance
 CallLesterKey        := "+F6"           ; Call Lester
-
+; TODO: invite all friends to org
+; TODO: cycle through org outfits
+; TODO: Ballistic armor drop
+; TODO: Ammo Menu
+; TODO: Spawn Terrorbyte, avenger, mobile ops
+; TODO: Enable VIP mode
+; TODO: Disable VIP mode
 
 ; Options (should be fine out of the box)
 DoConfirmKill        := true  ; If true the KillGame action will ask for confirmation before killing the process
