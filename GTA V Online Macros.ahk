@@ -1,5 +1,6 @@
 #MaxThreadsPerHotkey 2
-#Include chat_snippets.ahk
+#Include lib/chat_snippets.ahk
+#Include lib/config.ahk
 ;
 ; GTA V Online AHK-Macros v1.1.1 by 2called-chaos
 ; based on/inspired by GTA V Useful Macros v4.21 by twentyafterfour
@@ -75,68 +76,12 @@ CEORegisterKey       := "F18"           ; Register as a CEO and enable VIP mode
 VIPRetireKey         := "+F18"          ; Retire as CEO/VIP/MC and disable VIP mode
 CEOBuzzardKey        := "F21"           ; Spawn free CEO buzzard
 CEOBallerKey         := "F20"           ; Spawn free CEO Baller
-DialDialogKey        := "+F5"           ; Call GUI with a list of almost all numbers
 CallMechanicKey      := "F5"            ; Call Mechanic
 CallPegasusKey       := "F22"           ; Call Pegasus
 CallMerryweatherKey  := "F23"           ; Call Merryweather
+CallAssistantKey     := "+F23"          ; Call Assistant
 CallInsuranceKey     := "F6"            ; Call Insurance
 CallLesterKey        := "+F6"           ; Call Lester
-
-; Options (should be fine out of the box)
-DoConfirmKill        := true  ; If true the KillGame action will ask for confirmation before killing the process
-DoConfirmDisconnect  := true  ; If true the ForceDisconnect action will ask for confirmation before suspending the process
-IntDisconnectDelay   := 10    ; Amount of seconds to freeze the process for, 10 works fine
-IsVIPActivated       := false ; Initial status of CEO/VIP mode (after (re)loading script)
-IsAFKActivated       := false ; Initial status of AFK mode (should always be false)
-IsClickerActivated   := false ; Initial status of Clicker (should always be false)
-DisableCapsOnAction  := true  ; Disable caps lock before executing macros, some macros might fail if caps lock is on
-
-
-; Delays (you normally don't want to change these, you can try to play with these values if you have a slow/fast PC)
-IntFocusDelay        := 100  ; delay (in ms) after focussing game when AHK-GUI took focus.
-IntMenuDelay         := 120  ; delay (in ms) after opening interaction menu.
-IntPhoneMenuDelay    := 1850 ; delay (in ms) after opening phone menu.
-IntPhoneMenuDelay2   := 250  ; delay (in ms) after selecting phone menu entries.
-IntPhoneScrollDelay  := 75   ; delay (in ms) between scrolls in the phone menu.
-IntKeySendDelay      := 25   ; delay (in ms) delay between send key commands.
-IntKeyPressDuration  := 5    ; duration (in ms) each key press is held down.
-
-
-; In case you changed your ingame bindings:
-IGB_Interaction := "m"
-IGB_Phone := "up"
-IGB_Pause := "p"
-
-
-; Phone numbers for DialDialog GUI dialog (you can change the order if you want or hide entries by commenting them out)
-ArrayPhonebook := []
-ArrayPhonebook.push("911           - Emergency Services")
-ArrayPhonebook.push("328-555-0153  - Mechanic")
-ArrayPhonebook.push("611-555-0149  - Mors Mutual Insurance")
-ArrayPhonebook.push("328-555-0122  - Pegasus Lifestyle Management")
-ArrayPhonebook.push("273-555-0120  - Merryweather Security")
-ArrayPhonebook.push("346-555-0176  - Atomic Blimp")
-ArrayPhonebook.push("323-555-5555  - Downtown Cab Co.")
-ArrayPhonebook.push("346-555-0102  - Lester Crest")
-ArrayPhonebook.push("555-0182      - (useless) *modem* ")
-ArrayPhonebook.push("1-999-9327667 - (useless) *holding music* ")
-ArrayPhonebook.push("425-555-0170  - (useless) 'This mailbox is full' ")
-ArrayPhonebook.push("310-555-0156  - (useless) *Pickup* .. *Hangup*")
-ArrayPhonebook.push("1-999-768822  - (useless) 'This number is no longer in service'")
-ArrayPhonebook.push("273-555-0155  - (useless) Truthseeker Helpline")
-
-; ==============================
-; === CONFIGURATION GOES ^^^ ===
-; ==============================
-
-
-
-
-
-
-
-
-
 
 ; ================================================
 ; === Are you sure you want to scroll further? ===
@@ -167,12 +112,12 @@ Hotkey, %ForceDisconnectKey%, ForceDisconnect
 Hotkey, %RandomHeistKey%, RandomHeist
 Hotkey, %ChatSnippetsKey%, ChatSnippets
 Hotkey, %CEOBuzzardKey%, CEOBuzzard
-Hotkey, %DialDialogKey%, DialDialog
 Hotkey, %CallMechanicKey%, CallMechanic
 Hotkey, %CallPegasusKey%, CallPegasus
 Hotkey, %CallMerryweatherKey%, CallMerryweather
 Hotkey, %CallInsuranceKey%, CallInsurance
 Hotkey, %CallLesterKey%, CallLester
+Hotkey, %CallAssistantKey%, CallAssistant
 
 Hotkey, %CEOBallerKey%, CEOBaller
 Hotkey, %ReturnCarKey%, ReturnCar
@@ -648,48 +593,6 @@ _ChatSnippetsTypeout:
   Gui, CSNIP:destroy
   Return
 
-; Phone calls
-DialDialog:
-  pbl := ""
-  For each, item in ArrayPhonebook
-    pbl .= (!pbl ? "" : "|") item
-  Gui, DIAL:add, Text, , double click item
-  Gui, DIAL:Font,, Courier New
-  Gui, DIAL:add, ListBox, w500 h250 vPhoneNumberSelect g_DialDialogMakeCallFromSelect, %pbl%
-  Gui, DIAL:Font,, Arial
-  Gui, DIAL:add, Text, , or type number:
-  Gui, DIAL:add, Edit, w500 vPhoneNumber,
-  Gui, DIAL:add, Button, w500 Default g_DialDialogMakeCall, make call...
-  Gui, DIAL:show
-  return
-
-DIALGuiEscape:
-  Gui, DIAL:cancel
-  Gui, DIAL:destroy
-  bringGameIntoFocus()
-  return
-
-DIALGuiClose:
-  Gui, DIAL:cancel
-  Gui, DIAL:destroy
-  bringGameIntoFocus()
-  return
-
-_DialDialogMakeCallFromSelect:
-  if(A_GuiEvent = "DoubleClick")
-    GoTo _DialDialogMakeCall
-  Return
-
-_DialDialogMakeCall:
-  Gui, DIAL:submit
-  bringGameIntoFocus(true)
-  if PhoneNumber
-    dialNumber(PhoneNumber, true)
-  else if PhoneNumberSelect
-    dialNumber(PhoneNumberSelect, true)
-  Gui, DIAL:destroy
-  return
-
 CallMechanic:
   ;makeCall(8, true)
   dialNumber("328-555-0153", true)
@@ -713,4 +616,8 @@ CallInsurance:
 CallLester:
   ;makeCall(12, true)
   dialNumber("346-555-0102", true)
+  return
+
+CallAssistant:
+  makeCall(26, true)
   return
