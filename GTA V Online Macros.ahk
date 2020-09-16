@@ -1,5 +1,5 @@
 #MaxThreadsPerHotkey 2
-
+#Include chat_snippets.ahk
 ;
 ; GTA V Online AHK-Macros v1.1.1 by 2called-chaos
 ; based on/inspired by GTA V Useful Macros v4.21 by twentyafterfour
@@ -32,7 +32,17 @@
 ;
 ;     https://github.com/2called-chaos/gtav-online-ahk
 ;
-
+;
+; TODO: invite all friends to org
+; TODO: cycle through org outfits
+; TODO: Ballistic armor drop
+; TODO: Ammo Menu
+; TODO: Spawn Terrorbyte, avenger, mobile ops
+; TODO: auto open chat and send message
+; TODO: seperate team and public message systems
+; TODO: open casino hack ahk
+;
+;
 
 
 ; ==============================
@@ -60,9 +70,9 @@ KillGameKey          := "+F12"          ; Kill game process, requires pskill.exe
 ForceDisconnectKey   := "F12"           ; Force disconnect by suspending process for 10s, requires pssuspend.exe
 ChatSnippetsKey      := "F11"           ; Gives you a few text snippets to put in chat (chat must be already open)
 RandomHeistKey       := "F7"            ; Chooses on-call random heist from phone options
-MCRegisterKey        := "+F19"          ; Register as a MC President
-CEORegisterKey       := "F18"           ; Register as a CEO
-VIPRetireKey         := "+F18"          ; Retire as CEO/VIP/MC
+MCRegisterKey        := "+F19"          ; Register as a MC President and enable VIP mode
+CEORegisterKey       := "F18"           ; Register as a CEO and enable VIP mode
+VIPRetireKey         := "+F18"          ; Retire as CEO/VIP/MC and disable VIP mode
 CEOBuzzardKey        := "F21"           ; Spawn free CEO buzzard
 CEOBallerKey         := "F20"           ; Spawn free CEO Baller
 DialDialogKey        := "+F5"           ; Call GUI with a list of almost all numbers
@@ -71,13 +81,6 @@ CallPegasusKey       := "F22"           ; Call Pegasus
 CallMerryweatherKey  := "F23"           ; Call Merryweather
 CallInsuranceKey     := "F6"            ; Call Insurance
 CallLesterKey        := "+F6"           ; Call Lester
-; TODO: invite all friends to org
-; TODO: cycle through org outfits
-; TODO: Ballistic armor drop
-; TODO: Ammo Menu
-; TODO: Spawn Terrorbyte, avenger, mobile ops
-; TODO: Enable VIP mode
-; TODO: Disable VIP mode
 
 ; Options (should be fine out of the box)
 DoConfirmKill        := true  ; If true the KillGame action will ask for confirmation before killing the process
@@ -87,14 +90,6 @@ IsVIPActivated       := false ; Initial status of CEO/VIP mode (after (re)loadin
 IsAFKActivated       := false ; Initial status of AFK mode (should always be false)
 IsClickerActivated   := false ; Initial status of Clicker (should always be false)
 DisableCapsOnAction  := true  ; Disable caps lock before executing macros, some macros might fail if caps lock is on
-
-
-; Chat snippets (you can add more, comment them out or remove them, the pushs that is)
-ArrayChatSnippets := []
-ArrayChatSnippets.push("Player saved outfits please :)")
-ArrayChatSnippets.push("Yay, cheaters")
-ArrayChatSnippets.push("I take that explosive sniper of yours and insert it sideways...")
-ArrayChatSnippets.push("You want some cool AHK macros? github.com/2called-chaos/gtav-online-ahk")
 
 
 ; Delays (you normally don't want to change these, you can try to play with these values if you have a slow/fast PC)
@@ -502,6 +497,16 @@ ToggleVIP:
   Sleep 2000
   SplashTextOff
   bringGameIntoFocus()
+  return
+
+; Explicitly enable VIP mode
+EnableVIP:
+  IsVIPActivated = true
+  return
+
+; Explicitly disable VIP mode
+DisableVIP:
+  IsVIPActivated = false
   return
 
 ; Open up snack menu for manual selection (or stock check) of snacks
